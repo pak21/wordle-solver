@@ -32,12 +32,11 @@ def recurse(answers, guess, depth):
     all_signatures = {signature(a, guess) for a in answers}
 
     for sig in sorted(all_signatures):
-        possibles = [a for a in answers if signature(a, guess) == sig]
-
-        if len(possibles) == 1:
-            print(f'{indent}{sig}: only possible answer is {possibles[0]}')
+        if sig == 'ggggg':
+            print(f'{indent}{sig}: {guess} is correct after {depth} guesses')
         else:
-            potential_guesses = sorted([(worst_case(possibles, w), w) for w in all_answers])
+            possibles = [a for a in answers if signature(a, guess) == sig]
+            potential_guesses = sorted([(worst_case(possibles, w), w) for w in words])
             grouped = itertools.groupby(potential_guesses, key=itemgetter(0))
             worst_case_count, best_guesses_g = next(iter(grouped))
             best_guesses = {g[1] for g in best_guesses_g}
@@ -47,9 +46,9 @@ def recurse(answers, guess, depth):
             recurse(possibles, next_guess, depth + 1)
 
 if True:
-    potential_guesses = sorted([(worst_case(all_answers, w), w) for w in all_answers])
+    potential_guesses = sorted([(worst_case(all_answers, w), w) for w in words])
     worst_case_count, first_guess = potential_guesses[0]
     print(f'First guess should be {first_guess} which leaves a worst case of {worst_case_count}')
     recurse(all_answers, first_guess, 1)
 else:
-    recurse(all_answers, 'raise', 0)
+    recurse(all_answers, 'raise', 1)
