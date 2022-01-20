@@ -24,8 +24,12 @@ def signature(possible, guess):
 def worst_case(answers, guess):
     sigs = sorted([(signature(a, guess), a) for a in answers])
     grouped = itertools.groupby(sigs, key=itemgetter(0))
-    n = max([len(list(v)) for _, v in grouped])
-    return n
+    return max([len(list(v)) for _, v in grouped])
+
+def get_next_guess(possibles, words):
+    potential_guesses = sorted([(worst_case(possibles, w), not(w in possibles), w) for w in words])
+    worst_case_count, _, next_guess = potential_guesses[0]
+    return next_guess, worst_case_count
 
 def recurse(answers, guess, depth):
     indent = '  ' * depth
@@ -36,18 +40,12 @@ def recurse(answers, guess, depth):
             print(f'{indent}{sig}: {guess} is correct after {depth} guesses')
         else:
             possibles = [a for a in answers if signature(a, guess) == sig]
-            potential_guesses = sorted([(worst_case(possibles, w), w) for w in words])
-            grouped = itertools.groupby(potential_guesses, key=itemgetter(0))
-            worst_case_count, best_guesses_g = next(iter(grouped))
-            best_guesses = {g[1] for g in best_guesses_g}
-            overlap = best_guesses.intersection(possibles)
-            next_guess = list(overlap)[0] if overlap else list(best_guesses)[0]
+            next_guess, worst_case_count = get_next_guess(possibles, words)
             print(f'{indent}{sig}: next guess should be {next_guess} which leaves a worst case of {worst_case_count}')
             recurse(possibles, next_guess, depth + 1)
 
 if True:
-    potential_guesses = sorted([(worst_case(all_answers, w), w) for w in words])
-    worst_case_count, first_guess = potential_guesses[0]
+    first_guess, worst_case_count = get_next_guess(all_answers, words)
     print(f'First guess should be {first_guess} which leaves a worst case of {worst_case_count}')
     recurse(all_answers, first_guess, 1)
 else:
