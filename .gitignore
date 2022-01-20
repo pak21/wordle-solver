@@ -1,3 +1,4 @@
 wordle-allowed-guesses.txt
 wordle-answers-alphabetical.txt
 *.swp
+__pycache__
