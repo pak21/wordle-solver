@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import functools
 import itertools
 from operator import itemgetter
 
@@ -15,11 +16,23 @@ with open(args.answers) as f:
 with open(args.words) as f:
     words = {l.strip() for l in f}.union(all_answers)
 
-def signature1(i, g, possible):
-    return 'g' if possible[i] == g else ('y' if g in possible else '.')
-
+@functools.cache
 def signature(possible, guess):
-    return ''.join([signature1(i, g, possible) for i, g in enumerate(guess)])
+    poss_chars = list(possible)
+    sig = ''
+    for i, g in enumerate(guess):
+        if poss_chars[i] == g:
+            poss_chars[i] = None
+            sig += 'g'
+        else:
+            try:
+                j = poss_chars.index(g)
+                poss_chars[j] = None
+                sig += 'y'
+            except ValueError:
+                sig += '.'
+
+    return sig
 
 def worst_case(answers, guess):
     sigs = sorted([(signature(a, guess), a) for a in answers])
