@@ -25,8 +25,8 @@ def worst_case(answers, guess):
 def get_next_guess(possibles, words):
     potential_guesses = sorted([(worst_case(possibles, w), w) for w in words])
     worst_case_count = potential_guesses[0][0]
-    tied_guesses = sorted([(count, wordle.score(guess, possibles), guess) for count, guess in potential_guesses if count == worst_case_count])
-    return tied_guesses[0][2], worst_case_count
+    tied_guesses = [(wordle.score(guess, possibles), guess) for count, guess in potential_guesses if count == worst_case_count]
+    return min(tied_guesses)[1], worst_case_count
 
 def recurse(answers, guess, depth):
     indent = '  ' * depth
@@ -35,13 +35,16 @@ def recurse(answers, guess, depth):
 
     for sig, p in grouped:
         possibles = [w for _, w in p]
-        if sig == 'ggggg':
-            print(f'{indent}{sig}: {guess} is correct after {depth} guesses')
+        if len(possibles) == 1:
+            if sig == 'ggggg':
+                print(f'{indent}{sig}: solution is {possibles[0]} after {depth} guesses')
+            else:
+                print(f'{indent}{sig}: solution is {possibles[0]} after {depth+1} guesses')
         else:
             next_guess, worst_case_count = get_next_guess(possibles, words)
-            print(f'{indent}{sig}: next guess should be {next_guess} which leaves a worst case of {worst_case_count}')
+            print(f'{indent}{sig}: next guess should be {next_guess} which leaves a worst case of {worst_case_count}/{len(possibles)}')
             recurse(possibles, next_guess, depth + 1)
 
 first_guess, worst_case_count = get_next_guess(all_answers, words)
-print(f'First guess should be {first_guess} which leaves a worst case of {worst_case_count}')
+print(f'First guess should be {first_guess} which leaves a worst case of {worst_case_count}/{len(all_answers)}')
 recurse(all_answers, first_guess, 1)
