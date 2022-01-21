@@ -7,7 +7,7 @@ but it's probably pretty close and at least shows that a solution does exist.
 
 ## TODO
 
-* Hard mode
+* Check edge cases for hard mode constraints against actual game behaviour.
 
 ## Notes
 

@@ -27,3 +27,12 @@ def signature(target, guess):
 
 def score(guess, possibles):
     return (not(guess in possibles), -sum([sum([a == b for a, b in zip(guess, w)]) for w in possibles]))
+
+def hard_mode_filter(words, guess, signature):
+    for i, s in enumerate(signature):
+        if s == 'g':
+            words = {w for w in words if guess[i] == w[i]}
+        elif s == 'y':
+            words = {w for w in words if guess[i] != w[i] and guess[i] in w}
+
+    return words
