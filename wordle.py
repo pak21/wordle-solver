@@ -24,3 +24,6 @@ def signature(target, guess):
             pass
 
     return ''.join(sig)
+
+def score(guess, possibles):
+    return (not(guess in possibles), -sum([sum([a == b for a, b in zip(guess, w)]) for w in possibles]))

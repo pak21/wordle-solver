@@ -23,9 +23,10 @@ def worst_case(answers, guess):
     return max(collections.Counter(sigs).values())
 
 def get_next_guess(possibles, words):
-    potential_guesses = [(worst_case(possibles, w), not(w in possibles), w) for w in words]
-    worst_case_count, _, next_guess = min(potential_guesses)
-    return next_guess, worst_case_count
+    potential_guesses = sorted([(worst_case(possibles, w), w) for w in words])
+    worst_case_count = potential_guesses[0][0]
+    tied_guesses = sorted([(count, wordle.score(guess, possibles), guess) for count, guess in potential_guesses if count == worst_case_count])
+    return tied_guesses[0][2], worst_case_count
 
 def recurse(answers, guess, depth):
     indent = '  ' * depth
