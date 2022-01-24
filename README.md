@@ -9,7 +9,12 @@ It does _not_ find a solution for hard mode; my gut feel is that it's not
 possible as there are too many sets like `[bchlmpw]atch` which are real "traps"
 if you run into them.
 
-## Notes
+## TODO
+
+* Rather than looking at min-max, should we be looking at the entropy (or
+similar) of the distribution of possible outcomes after each word?
+
+## Notes
 
 Get word lists from
 [here](https://www.reddit.com/r/wordle/comments/s4tcw8/a_note_on_wordles_word_list/hstkip2/);
