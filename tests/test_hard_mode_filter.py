@@ -30,12 +30,23 @@ class TestHardModeFilter():
 
         actual = wordle.hard_mode_filter(words, guess, signature)
 
-    def test_yg_gge(self):
+    def test_yg_gg(self):
         words = {'dowdy', 'goody', 'howdy', 'moody', 'toddy', 'woody'}
         guess = 'woody'
         signature = 'yg.gg'
 
         expected = {'dowdy', 'howdy'}
+
+        actual = wordle.hard_mode_filter(words, guess, signature)
+
+        assert actual == expected
+
+    def test_duplicated_letter(self):
+        words = {'soily'}
+        guess = 'llama'
+        signature = 'yy...'
+
+        expected = set()
 
         actual = wordle.hard_mode_filter(words, guess, signature)
 
