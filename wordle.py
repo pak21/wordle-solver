@@ -1,3 +1,4 @@
+import collections
 import functools
 
 @functools.cache
@@ -28,11 +29,20 @@ def signature(target, guess):
 def score(guess, possibles):
     return (not(guess in possibles), -sum([sum([a == b for a, b in zip(guess, w)]) for w in possibles]))
 
+def _incorrect_place_filter(word, required):
+    word_letters = collections.Counter(word)
+    for requirement_letter, requirement_count in required.items():
+        if word_letters.get(requirement_letter, 0) < requirement_count:
+            return False
+
+    return True
+
 def hard_mode_filter(words, guess, signature):
-    for i, s in enumerate(signature):
-        if s == 'g':
-            words = {w for w in words if guess[i] == w[i]}
-        elif s == 'y':
-            words = {w for w in words if guess[i] != w[i] and guess[i] in w}
+    correct_place_matches = [(i, g) for i, (g, s) in enumerate(zip(guess, signature)) if s == 'g']
+    for i, g in correct_place_matches:
+        words = {w for w in words if w[i] == g}
+
+    incorrect_place_matches = collections.Counter([g for g, s in zip(guess, signature) if s != '.'])
+    words = {w for w in words if _incorrect_place_filter(w, incorrect_place_matches)}
 
     return words

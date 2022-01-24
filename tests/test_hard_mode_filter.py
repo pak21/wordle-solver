@@ -21,17 +21,21 @@ class TestHardModeFilter():
 
         actual = wordle.hard_mode_filter(words, guess, signature)
 
+        assert actual == expected
+
     def test_correct_letter_incorrect_place(self):
         words = {'again', 'relax', 'arise', 'merry', 'stunt'}
         guess = 'robot'
         signature = 'y....'
 
-        expected = {'arise', 'merry'}
+        expected = {'arise', 'merry', 'relax'}
 
         actual = wordle.hard_mode_filter(words, guess, signature)
 
+        assert actual == expected
+
     def test_yg_gg(self):
-        words = {'dowdy', 'goody', 'howdy', 'moody', 'toddy', 'woody'}
+        words = {'dowdy', 'goody', 'howdy', 'moody', 'toddy'}
         guess = 'woody'
         signature = 'yg.gg'
 
@@ -42,11 +46,22 @@ class TestHardModeFilter():
         assert actual == expected
 
     def test_duplicated_letter(self):
-        words = {'soily'}
+        words = {'soily', 'knoll'}
         guess = 'llama'
         signature = 'yy...'
 
-        expected = set()
+        expected = {'knoll'}
+
+        actual = wordle.hard_mode_filter(words, guess, signature)
+
+        assert actual == expected
+
+    def test_duplicated_letter_gy(self):
+        words = {'foils', 'knoll'}
+        guess = 'ladle'
+        signature = 'y..g.'
+
+        expected = {'knoll'}
 
         actual = wordle.hard_mode_filter(words, guess, signature)
 
