@@ -7,9 +7,17 @@ but it's probably pretty close and at least shows that a solution does exist.
 
 ## TODO
 
-* Check edge cases for hard mode constraints against actual game behaviour.
+* Fix failing hard mode filter test.
+  * Think of any more potential hard mode filter edge cases.
 
 ## Notes
 
 Get word lists from
-[here](https://www.reddit.com/r/wordle/comments/s4tcw8/a_note_on_wordles_word_list/hstkip2/).
+[here](https://www.reddit.com/r/wordle/comments/s4tcw8/a_note_on_wordles_word_list/hstkip2/);
+I have:
+
+```
+$ sha1sum wordle-answers-alphabetical.txt wordle-allowed-guesses.txt 
+c216eac05a4f78fa749965e9fc8bf2c66c704a8c  wordle-answers-alphabetical.txt
+ccf7adfd89f8177d1367224bdb73675f97e9d75b  wordle-allowed-guesses.txt
+```
