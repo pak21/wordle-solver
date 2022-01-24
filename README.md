@@ -5,10 +5,9 @@ A greedy min-max solver for the now famous
 number of possible answers after each guess. This may not be globally optimal,
 but it's probably pretty close and at least shows that a solution does exist.
 
-## TODO
-
-* Fix failing hard mode filter test.
-  * Think of any more potential hard mode filter edge cases.
+It does _not_ find a solution for hard mode; my gut feel is that it's not
+possible as there are too many sets like `[bchlmpw]atch` which are real "traps"
+if you run into them.
 
 ## Notes
 
