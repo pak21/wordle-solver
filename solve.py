@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import collections
 import itertools
 from operator import itemgetter
 
@@ -22,12 +21,12 @@ with open(args.words) as f:
 
 def worst_case(answers, guess):
     sigs = [wordle.signature(a, guess) for a in answers]
-    return max(collections.Counter(sigs).values())
+    return wordle.score(sigs)
 
 def get_next_guess(possibles, words):
     potential_guesses = sorted([(worst_case(possibles, w), w) for w in words])
     worst_case_count = potential_guesses[0][0]
-    tied_guesses = [(wordle.score(guess, possibles), guess) for count, guess in potential_guesses if count == worst_case_count]
+    tied_guesses = [(wordle.tiebreak(guess, possibles), guess) for count, guess in potential_guesses if count == worst_case_count]
     return min(tied_guesses)[1], worst_case_count
 
 def recurse(answers, guess, words, hard_mode, depth):

@@ -26,7 +26,10 @@ def signature(target, guess):
 
     return ''.join(sig)
 
-def score(guess, possibles):
+def score(signatures):
+    return max(collections.Counter(signatures).values())
+
+def tiebreak(guess, possibles):
     return (not(guess in possibles), -sum([sum([a == b for a, b in zip(guess, w)]) for w in possibles]))
 
 def _incorrect_place_filter(word, required):

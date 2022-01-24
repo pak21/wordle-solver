@@ -3,12 +3,23 @@ import pytest
 import wordle
 
 class TestScore():
-    def test_prefer_word_in_set(self):
-        guess1 = 'build'
-        guess2 = 'glade'
-        possibles = {guess1, 'guild', 'quill'}
+    def test_aba(self):
+        signatures = ['.....', 'y....', '.....']
 
-        score1 = wordle.score(guess1, possibles)
-        score2 = wordle.score(guess2, possibles)
+        actual = wordle.score(signatures)
 
-        assert score1 < score2
+        assert actual == 2
+
+    def test_abac(self):
+        signatures = ['.....', 'y....', '.....', 'g....']
+
+        actual = wordle.score(signatures)
+
+        assert actual == 2
+
+    def test_abbaa(self):
+        signatures = ['.....', 'y....', 'y....', '.....', '.....']
+
+        actual = wordle.score(signatures)
+
+        assert actual == 3
