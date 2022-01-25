@@ -19,15 +19,13 @@ with open(args.answers) as f:
 with open(args.words) as f:
     all_words = {l.strip() for l in f}.union(all_answers)
 
-def worst_case(answers, guess):
+def get_score(answers, guess):
     sigs = [wordle.signature(a, guess) for a in answers]
     return wordle.score(sigs)
 
 def get_next_guess(possibles, words):
-    potential_guesses = sorted([(worst_case(possibles, w), w) for w in words])
-    worst_case_count = potential_guesses[0][0]
-    tied_guesses = [(wordle.tiebreak(guess, possibles), guess) for count, guess in potential_guesses if count == worst_case_count]
-    return min(tied_guesses)[1], worst_case_count
+    score, next_guess = min([(get_score(possibles, w), w) for w in words])
+    return next_guess, score
 
 def recurse(answers, guess, words, hard_mode, depth):
     indent = '  ' * depth
@@ -46,14 +44,14 @@ def recurse(answers, guess, words, hard_mode, depth):
             if hard_mode:
                 filtered_words = wordle.hard_mode_filter(filtered_words, guess, sig)
 
-            next_guess, worst_case_count = get_next_guess(possibles, filtered_words)
-            print(f'{indent}{sig}: next guess should be {next_guess} which leaves a worst case of {worst_case_count}/{len(possibles)}')
+            next_guess, score = get_next_guess(possibles, filtered_words)
+            print(f'{indent}{sig}: next guess should be {next_guess} with a score of {score}')
             recurse(possibles, next_guess, filtered_words, hard_mode, depth + 1)
 
 if args.first:
-    first_guess, worst_case_count = args.first, '???'
+    first_guess, score = args.first, '???'
 else:
-    first_guess, worst_case_count = get_next_guess(all_answers, all_words)
+    first_guess, score = get_next_guess(all_answers, all_words)
 
-print(f'First guess should be {first_guess} which leaves a worst case of {worst_case_count}/{len(all_answers)}')
+print(f'First guess should be {first_guess} with a score of {score}')
 recurse(all_answers, first_guess, all_words, args.hard, 1)

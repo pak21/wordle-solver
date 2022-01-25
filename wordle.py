@@ -1,5 +1,6 @@
 import collections
 import functools
+import math
 
 @functools.cache
 def signature(target, guess):
@@ -27,10 +28,8 @@ def signature(target, guess):
     return ''.join(sig)
 
 def score(signatures):
-    return max(collections.Counter(signatures).values())
-
-def tiebreak(guess, possibles):
-    return (not(guess in possibles), -sum([sum([a == b for a, b in zip(guess, w)]) for w in possibles]))
+    counts = collections.Counter(signatures)
+    return sum([-1 if s == 'ggggg' else n * math.log(n) for s, n in counts.items()])
 
 def _incorrect_place_filter(word, required):
     word_letters = collections.Counter(word)
